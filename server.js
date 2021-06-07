@@ -39,7 +39,6 @@ app.use((req, res, next) => {
     next()
   } else {
     res.status(503).json({
-      success: false,
       message: 'Service unavailable'
     })
   }
@@ -51,22 +50,15 @@ app.get('/', (req, res) => {
 
 app.get('/messages', async (req, res) => {
   const messages = await Message.find().sort({ createdAt: 'desc' }).exec()
-  res.status(200).json({
-    success: true,
-    messages
-  })
+  res.json(messages)
 })
 
 app.post('/messages', async (req, res) => {
   try {
     const newMessage = await new Message(req.body).save()
-    res.status(200).json({
-      success: true,
-      newMessage
-    })
+    res.status(200).json(newMessage)
   } catch (error) {
     res.status(400).json({
-      success: false,
       message: 'Could not save to database',
       error
     })

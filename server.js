@@ -48,10 +48,32 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
-app.get('/messages', async (req, res) => {
+/* app.get('/messages', async (req, res) => {
   const messages = await Message.find().sort({ createdAt: 'desc' }).exec()
   res.json(messages)
+}) */
+
+///messages?per_page=10&page={sidonummer}
+
+app.get('/messages', async (req, res) => {
+  const { page, per_page } = req.query
+
+  const messages = await Message.aggregate([
+    {
+      $sort: {
+        createdAt: -1
+      }
+    },
+    {
+      $skip: Number((page - 1) * per_page + 1)
+    },
+    {
+      $limit: Number(per_page)
+    }
+  ])
+  res.json(messages)
 })
+
 
 app.post('/messages', async (req, res) => {
   try {

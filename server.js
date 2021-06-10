@@ -48,15 +48,16 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
-/* app.get('/messages', async (req, res) => {
+app.get('/messages', async (req, res) => {
   const messages = await Message.find().sort({ createdAt: 'desc' }).exec()
   res.json(messages)
-}) */
+})
 
 ///messages?per_page=10&page={sidonummer}
 
-app.get('/messages', async (req, res) => {
-  const { page, per_page } = req.query
+/* app.get('/messages', async (req, res) => {
+  const page = Number(req.query.page)
+  const per_page = Number(req.query.per_page)
 
   const messages = await Message.aggregate([
     {
@@ -72,7 +73,7 @@ app.get('/messages', async (req, res) => {
     }
   ])
   res.json(messages)
-})
+}) */
 
 
 app.post('/messages', async (req, res) => {

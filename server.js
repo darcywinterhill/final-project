@@ -17,11 +17,13 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Message is required'],
     minlength: [3, 'Minimum length is 3 characters'],
-    maxlength: [250, 'Maximium length is 250 characters']
+    maxlength: [140, 'Maximium length is 140 characters']
   },
   name: {
     type: String,
-    required: [true, 'Name is required']
+    required: [true, 'Name is required'],
+    minlength: [2, 'Minimum length is 2 characters'],
+    maxlength: [30, 'Maximium length is 30 characters']
   },
   createdAt: {
     type: Date,
@@ -87,8 +89,7 @@ app.post('/messages', async (req, res) => {
     res.status(200).json(newMessage)
   } catch (error) {
     res.status(400).json({
-      message: 'Could not save to database',
-      error
+      error: 'Could not save to database'
     })
   }
 })

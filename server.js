@@ -67,7 +67,31 @@ app.get('/', (req, res) => {
 ///messages?per_page=10&page={sidonummer}
 
 app.get('/messages', async (req, res) => {
-  const page = Number(req.query.page)
+  const { page = 1, limit = 8 } = req.query
+
+  try {
+    const messages = await Message.find()
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: 'desc'})
+      .exec()
+
+    const count = await Message.countDocuments()
+
+    res.json({
+      success: true,
+      messages,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error
+    })
+  }
+})
+/*   const page = Number(req.query.page)
   const per_page = Number(req.query.per_page)
 
   const messages = await Message.aggregate([
@@ -83,8 +107,8 @@ app.get('/messages', async (req, res) => {
       $limit: Number(per_page)
     }
   ])
-  res.json(messages)
-})
+  res.json(messages) */
+
 
 
 app.post('/messages', async (req, res) => {

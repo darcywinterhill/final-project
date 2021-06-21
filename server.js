@@ -55,9 +55,12 @@ app.get('/messages', async (req, res) => {
     success: true,
     messages
   })
-} catch {
-  res.status(400).json({ error: `Invalid request` })
-}
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error
+    })
+  }
 })
 
 ///messages?per_page=10&page={sidonummer}

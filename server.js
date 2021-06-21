@@ -49,11 +49,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/messages', async (req, res) => {
+  try {
   const messages = await Message.find().sort({ createdAt: 'desc' }).exec()
   res.json({
     success: true,
     messages
   })
+} catch {
+  res.status(400).json({ error: `Invalid request` })
+}
 })
 
 ///messages?per_page=10&page={sidonummer}

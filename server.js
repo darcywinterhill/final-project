@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import listEndpoints from 'express-list-endpoints'
 
 dotenv.config()
 
@@ -45,10 +46,10 @@ app.use((req, res, next) => {
 })
 
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
 })
 
-app.get('/messages', async (req, res) => {
+/* app.get('/messages', async (req, res) => {
   try {
   const messages = await Message.find().sort({ createdAt: 'desc' }).exec()
   res.json({
@@ -61,11 +62,11 @@ app.get('/messages', async (req, res) => {
       error
     })
   }
-})
+}) */
 
 ///messages?per_page=10&page={sidonummer}
 
-/* app.get('/messages', async (req, res) => {
+app.get('/messages', async (req, res) => {
   const page = Number(req.query.page)
   const per_page = Number(req.query.per_page)
 
@@ -83,7 +84,7 @@ app.get('/messages', async (req, res) => {
     }
   ])
   res.json(messages)
-}) */
+})
 
 
 app.post('/messages', async (req, res) => {

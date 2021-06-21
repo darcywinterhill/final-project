@@ -15,15 +15,13 @@ const app = express()
 const messageSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: [true, 'Message is required'],
-    minlength: [3, 'Minimum length is 3 characters'],
-    maxlength: [140, 'Maximium length is 140 characters']
+    required: true,
+    minlength: 3,
+    maxlength: 140
   },
   name: {
     type: String,
-    required: [true, 'Name is required'],
-    minlength: [2, 'Minimum length is 2 characters'],
-    maxlength: [30, 'Maximium length is 30 characters']
+    required: true
   },
   createdAt: {
     type: Date,
@@ -51,13 +49,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/messages', async (req, res) => {
-
-  try{
   const messages = await Message.find().sort({ createdAt: 'desc' }).exec()
-  res.json(messages)
-  } catch {
-    res.status(400).json({ error: `Invalid request` })
-  }
+  res.json({
+    success: true,
+    messages
+  })
 })
 
 ///messages?per_page=10&page={sidonummer}
@@ -86,10 +82,14 @@ app.get('/messages', async (req, res) => {
 app.post('/messages', async (req, res) => {
   try {
     const newMessage = await new Message(req.body).save()
-    res.status(200).json(newMessage)
+    res.status(200).json({
+      success: true,
+      newMessage
+    })
   } catch (error) {
     res.status(400).json({
-      error: 'Could not save to database'
+      success: false,
+      error
     })
   }
 })

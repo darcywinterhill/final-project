@@ -49,23 +49,6 @@ app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
-/* app.get('/messages', async (req, res) => {
-  try {
-  const messages = await Message.find().sort({ createdAt: 'desc' }).exec()
-  res.json({
-    success: true,
-    messages
-  })
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error
-    })
-  }
-}) */
-
-///messages?per_page=10&page={sidonummer}
-
 app.get('/messages', async (req, res) => {
   const { page = 1, limit = 8 } = req.query
 
@@ -91,25 +74,6 @@ app.get('/messages', async (req, res) => {
     })
   }
 })
-/*   const page = Number(req.query.page)
-  const per_page = Number(req.query.per_page)
-
-  const messages = await Message.aggregate([
-    {
-      $sort: {
-        createdAt: -1
-      }
-    },
-    {
-      $skip: Number((page - 1) * per_page + 1)
-    },
-    {
-      $limit: Number(per_page)
-    }
-  ])
-  res.json(messages) */
-
-
 
 app.post('/messages', async (req, res) => {
   try {
